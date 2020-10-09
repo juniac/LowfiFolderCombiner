@@ -98,6 +98,7 @@ namespace LowfiCombiner {
           folderListView.Items.Add(item);
         }
         fileCountLabel.Text = totalFiles.ToString();
+        makeDestinationFolderName();
         ////파일을 추가한다.
         //FileInfo[] files = dir.GetFiles();
 
@@ -127,6 +128,26 @@ namespace LowfiCombiner {
       } catch (Exception ex) {
         MessageBox.Show(ex.ToString());
       }
+    }
+
+    private void numberTextBox_TextChanged(object sender, EventArgs e) {
+      makeDestinationFolderName();
+    }
+
+    private void countTextBox_TextChanged(object sender, EventArgs e) {
+      makeDestinationFolderName();
+    }
+
+    private void makeDestinationFolderName() {
+      string numberText = "없음";
+      string countText = "없음";
+      if (String.IsNullOrEmpty(numberTextBox.Text) == false) {
+        numberText = numberTextBox.Text;
+      }
+      if (String.IsNullOrEmpty(countTextBox.Text) == false) {
+        countText = countTextBox.Text;
+      }
+      destinationTextBox.Text = $"{numberText}-{totalFiles.ToString()}-{countText}";
     }
   }
 }

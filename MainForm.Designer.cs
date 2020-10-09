@@ -32,7 +32,17 @@
       this.colModigy = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.label1 = new System.Windows.Forms.Label();
       this.fileCountLabel = new System.Windows.Forms.Label();
+      this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.label2 = new System.Windows.Forms.Label();
+      this.label3 = new System.Windows.Forms.Label();
+      this.numberTextBox = new System.Windows.Forms.TextBox();
+      this.countTextBox = new System.Windows.Forms.TextBox();
+      this.groupBox2 = new System.Windows.Forms.GroupBox();
+      this.destinationTextBox = new System.Windows.Forms.TextBox();
+      this.combineButton = new System.Windows.Forms.Button();
       this.targetGroupBox.SuspendLayout();
+      this.groupBox1.SuspendLayout();
+      this.groupBox2.SuspendLayout();
       this.SuspendLayout();
       // 
       // targetGroupBox
@@ -62,16 +72,20 @@
       // 
       // selectTargetFolderButton
       // 
+      this.selectTargetFolderButton.BackColor = System.Drawing.Color.Coral;
       this.selectTargetFolderButton.Location = new System.Drawing.Point(7, 21);
       this.selectTargetFolderButton.Name = "selectTargetFolderButton";
       this.selectTargetFolderButton.Size = new System.Drawing.Size(136, 25);
       this.selectTargetFolderButton.TabIndex = 0;
       this.selectTargetFolderButton.Text = "대상 폴더 선택";
-      this.selectTargetFolderButton.UseVisualStyleBackColor = true;
+      this.selectTargetFolderButton.UseVisualStyleBackColor = false;
       this.selectTargetFolderButton.Click += new System.EventHandler(this.selectTargetFolderButton_Click);
       // 
       // folderListView
       // 
+      this.folderListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
       this.folderListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colName,
             this.colCount,
@@ -102,6 +116,7 @@
       // 
       // label1
       // 
+      this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
       this.label1.AutoSize = true;
       this.label1.Location = new System.Drawing.Point(20, 527);
       this.label1.Name = "label1";
@@ -111,6 +126,7 @@
       // 
       // fileCountLabel
       // 
+      this.fileCountLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
       this.fileCountLabel.AutoSize = true;
       this.fileCountLabel.Location = new System.Drawing.Point(108, 527);
       this.fileCountLabel.Name = "fileCountLabel";
@@ -118,12 +134,100 @@
       this.fileCountLabel.TabIndex = 3;
       this.fileCountLabel.Text = "0 개";
       // 
+      // groupBox1
+      // 
+      this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+      this.groupBox1.Controls.Add(this.countTextBox);
+      this.groupBox1.Controls.Add(this.numberTextBox);
+      this.groupBox1.Controls.Add(this.label3);
+      this.groupBox1.Controls.Add(this.label2);
+      this.groupBox1.Location = new System.Drawing.Point(22, 556);
+      this.groupBox1.Name = "groupBox1";
+      this.groupBox1.Size = new System.Drawing.Size(251, 82);
+      this.groupBox1.TabIndex = 4;
+      this.groupBox1.TabStop = false;
+      this.groupBox1.Text = "폴더 이름 설정";
+      // 
+      // label2
+      // 
+      this.label2.AutoSize = true;
+      this.label2.Location = new System.Drawing.Point(61, 27);
+      this.label2.Name = "label2";
+      this.label2.Size = new System.Drawing.Size(57, 12);
+      this.label2.TabIndex = 0;
+      this.label2.Text = "폴더번호:";
+      // 
+      // label3
+      // 
+      this.label3.AutoSize = true;
+      this.label3.Location = new System.Drawing.Point(17, 50);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(101, 12);
+      this.label3.TabIndex = 1;
+      this.label3.Text = "최종 이미지 번호:";
+      // 
+      // numberTextBox
+      // 
+      this.numberTextBox.Location = new System.Drawing.Point(124, 24);
+      this.numberTextBox.Name = "numberTextBox";
+      this.numberTextBox.Size = new System.Drawing.Size(111, 21);
+      this.numberTextBox.TabIndex = 0;
+      this.numberTextBox.TextChanged += new System.EventHandler(this.numberTextBox_TextChanged);
+      // 
+      // countTextBox
+      // 
+      this.countTextBox.Location = new System.Drawing.Point(124, 47);
+      this.countTextBox.Name = "countTextBox";
+      this.countTextBox.Size = new System.Drawing.Size(111, 21);
+      this.countTextBox.TabIndex = 1;
+      this.countTextBox.TextChanged += new System.EventHandler(this.countTextBox_TextChanged);
+      // 
+      // groupBox2
+      // 
+      this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this.groupBox2.Controls.Add(this.destinationTextBox);
+      this.groupBox2.Location = new System.Drawing.Point(280, 556);
+      this.groupBox2.Name = "groupBox2";
+      this.groupBox2.Size = new System.Drawing.Size(502, 82);
+      this.groupBox2.TabIndex = 5;
+      this.groupBox2.TabStop = false;
+      this.groupBox2.Text = "생성폴더명";
+      // 
+      // destinationTextBox
+      // 
+      this.destinationTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this.destinationTextBox.Font = new System.Drawing.Font("맑은 고딕", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+      this.destinationTextBox.Location = new System.Drawing.Point(6, 23);
+      this.destinationTextBox.Name = "destinationTextBox";
+      this.destinationTextBox.ReadOnly = true;
+      this.destinationTextBox.Size = new System.Drawing.Size(490, 43);
+      this.destinationTextBox.TabIndex = 0;
+      this.destinationTextBox.Text = "폴더번호-총파일개수-최종이미지번호";
+      // 
+      // combineButton
+      // 
+      this.combineButton.BackColor = System.Drawing.SystemColors.Highlight;
+      this.combineButton.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+      this.combineButton.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+      this.combineButton.Location = new System.Drawing.Point(671, 644);
+      this.combineButton.Name = "combineButton";
+      this.combineButton.Size = new System.Drawing.Size(111, 70);
+      this.combineButton.TabIndex = 6;
+      this.combineButton.Text = "합치기";
+      this.combineButton.UseVisualStyleBackColor = false;
+      // 
       // LowfiCombiner
       // 
       this.AllowDrop = true;
       this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(800, 672);
+      this.ClientSize = new System.Drawing.Size(800, 726);
+      this.Controls.Add(this.combineButton);
+      this.Controls.Add(this.groupBox2);
+      this.Controls.Add(this.groupBox1);
       this.Controls.Add(this.fileCountLabel);
       this.Controls.Add(this.label1);
       this.Controls.Add(this.folderListView);
@@ -135,6 +239,10 @@
       this.DragEnter += new System.Windows.Forms.DragEventHandler(this.LowfiCombiner_DragEnter);
       this.targetGroupBox.ResumeLayout(false);
       this.targetGroupBox.PerformLayout();
+      this.groupBox1.ResumeLayout(false);
+      this.groupBox1.PerformLayout();
+      this.groupBox2.ResumeLayout(false);
+      this.groupBox2.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -150,6 +258,14 @@
     private System.Windows.Forms.ColumnHeader colModigy;
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.Label fileCountLabel;
+    private System.Windows.Forms.GroupBox groupBox1;
+    private System.Windows.Forms.TextBox countTextBox;
+    private System.Windows.Forms.TextBox numberTextBox;
+    private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.Label label2;
+    private System.Windows.Forms.GroupBox groupBox2;
+    private System.Windows.Forms.TextBox destinationTextBox;
+    private System.Windows.Forms.Button combineButton;
   }
 }
 
