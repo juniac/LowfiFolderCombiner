@@ -89,7 +89,7 @@ namespace LowfiCombiner {
         // 폴더를 추가한다.
         DirectoryInfo dir = new DirectoryInfo(this.targetFolder);
         DirectoryInfo[] folders = dir.GetDirectories();
-
+        totalFolderCountLabel.Text = $"{folders.Length.ToString()} 개";
         foreach (DirectoryInfo folder in folders) {
           int fileCount = folder.GetFiles().Length;
           totalFiles = totalFiles + fileCount;
@@ -222,7 +222,7 @@ namespace LowfiCombiner {
           }
           File.Move(file.FullName, fileDestination);
           statusLabel.Invoke((MethodInvoker)delegate {
-            statusLabel.Text = $"{file.Name} 이동중.. {moveProgress.ToString()}% - {count.ToString()} / {totalFiles.ToString()}";
+            statusLabel.Text = $"{file.Name} 이동중.. {(moveProgress / 10).ToString()}% - {count.ToString()} / {totalFiles.ToString()}";
           });
          
           //Debug.WriteLine(((double)count / (double)totalFiles) * 1000);
