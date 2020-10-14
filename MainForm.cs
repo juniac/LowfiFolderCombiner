@@ -20,6 +20,7 @@ namespace LowfiCombiner {
     private int totalFiles = 0;
     private int moveProgress = 0;
     private Random random = new Random();
+    private FileInfo[] files;
     public LowfiCombiner() {
       InitializeComponent();
       betterFolderBrowser.Title = "폴더 선택하기...";
@@ -85,22 +86,18 @@ namespace LowfiCombiner {
       try {
         totalFiles = 0;
         fileCountLabel.Text = totalFiles.ToString();
-        folderListView.Items.Clear();
+        files = new FileInfo[] { };
         // 폴더를 추가한다.
         DirectoryInfo dir = new DirectoryInfo(this.targetFolder);
-        DirectoryInfo[] folders = dir.GetDirectories();
+        DirectoryInfo[] folders = dir.GetDirectories("*", SearchOption.AllDirectories);
         totalFolderCountLabel.Text = $"{folders.Length.ToString()} 개";
-        foreach (DirectoryInfo folder in folders) {
-          int fileCount = folder.GetFiles().Length;
-          totalFiles = totalFiles + fileCount;
-          ListViewItem item = new ListViewItem(folder.Name);
-          item.SubItems.Add(fileCount.ToString()); // 크기, 폴더이므로 없음
-          
-          item.SubItems.Add(folder.LastWriteTime.ToString()); // 수정한 날짜
 
-          folderListView.Items.Add(item);
-        }
-        fileCountLabel.Text = totalFiles.ToString();
+        files = dir.GetFiles("*.jpg", SearchOption.AllDirectories);
+        FileInfo[] jpegFiles = dir.GetFiles("*.jpeg", SearchOption.AllDirectories);
+        files = files.Concat(jpegFiles).ToArray();
+
+        totalFiles = files.Length;
+        fileCountLabel.Text = files.Length.ToString();
         makeDestinationFolderName();
         ////파일을 추가한다.
         //FileInfo[] files = dir.GetFiles();
@@ -210,26 +207,34 @@ namespace LowfiCombiner {
       DirectoryInfo[] folders = dir.GetDirectories();
 
       int count = 0;
-      foreach (DirectoryInfo folder in folders) {
-        FileInfo[] files = folder.GetFiles();
-        foreach (FileInfo file in files) {
-          string fileDestination = destinationFolder + '\\' + file.Name;
-          //Debug.WriteLine(fileDestination);
+      
+      foreach (FileInfo file in files) {
+        string fileDestination = destinationFolder + '\\' + file.Name;
+        //Debug.WriteLine(fileDestination);
 
-          moveProgress = (int)Math.Round(((double)count / (double)totalFiles) * 1000);
+        moveProgress = (int)Math.Round(((double)count / (double)totalFiles) * 1000);
+        string extension = Path.GetExtension(file.FullName).ToUpper();
+        if (extension == ".JPEG" || extension == ".JPG") {
           if (File.Exists(fileDestination)) {
             fileDestination = destinationFolder + '\\' + randomString(5) + '-' + file.Name;
           }
-          File.Move(file.FullName, fileDestination);
-          statusLabel.Invoke((MethodInvoker)delegate {
-            statusLabel.Text = $"{file.Name} 이동중.. {(moveProgress / 10).ToString()}% - {count.ToString()} / {totalFiles.ToString()}";
-          });
-         
-          //Debug.WriteLine(((double)count / (double)totalFiles) * 1000);
-          fileBackgroundWorker.ReportProgress(moveProgress);
-          count++;
+          //Debug.WriteLine(fileDestination);
+          File.Copy(file.FullName, fileDestination);
+          //File.Move(file.FullName, fileDestination);
+
+        } else {
+          //File.Delete(file.FullName);
         }
+          
+        statusLabel.Invoke((MethodInvoker)delegate {
+          statusLabel.Text = $"{file.Name} 이동중.. {(moveProgress / 10).ToString()}% - {count.ToString()} / {totalFiles.ToString()}";
+        });
+         
+        //Debug.WriteLine(((double)count / (double)totalFiles) * 1000);
+        fileBackgroundWorker.ReportProgress(moveProgress);
+        count++;
       }
+      
     }
 
     private void fileBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
@@ -238,6 +243,14 @@ namespace LowfiCombiner {
 
     private void fileBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
       statusLabel.Text = "완료";
+      fileProgressBar.Value = 0;
+    }
+
+    private void destinationFolderButton_Click(object sender, EventArgs e) {
+      if (betterFolderBrowser.ShowDialog() == DialogResult.OK) {
+        string selectedFolder = betterFolderBrowser.SelectedFolder;
+        destinationFolderTextbox.Text = selectedFolder;
+      }
     }
   }
 }

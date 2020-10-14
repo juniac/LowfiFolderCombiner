@@ -27,21 +27,19 @@
       this.targetGroupBox = new System.Windows.Forms.GroupBox();
       this.targetFolderTextBox = new System.Windows.Forms.TextBox();
       this.selectTargetFolderButton = new System.Windows.Forms.Button();
-      this.folderListView = new System.Windows.Forms.ListView();
-      this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-      this.colCount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-      this.colModigy = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
       this.label1 = new System.Windows.Forms.Label();
       this.fileCountLabel = new System.Windows.Forms.Label();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.label2 = new System.Windows.Forms.Label();
-      this.label3 = new System.Windows.Forms.Label();
-      this.numberTextBox = new System.Windows.Forms.TextBox();
       this.countTextBox = new System.Windows.Forms.TextBox();
+      this.numberTextBox = new System.Windows.Forms.TextBox();
+      this.label3 = new System.Windows.Forms.Label();
+      this.label2 = new System.Windows.Forms.Label();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
+      this.destinationFolderTextbox = new System.Windows.Forms.TextBox();
+      this.destinationFolderButton = new System.Windows.Forms.Button();
+      this.label4 = new System.Windows.Forms.Label();
       this.destinationTextBox = new System.Windows.Forms.TextBox();
       this.combineButton = new System.Windows.Forms.Button();
-      this.label4 = new System.Windows.Forms.Label();
       this.totalFolderCountLabel = new System.Windows.Forms.Label();
       this.label6 = new System.Windows.Forms.Label();
       this.fileProgressBar = new System.Windows.Forms.ProgressBar();
@@ -88,50 +86,17 @@
       this.selectTargetFolderButton.UseVisualStyleBackColor = false;
       this.selectTargetFolderButton.Click += new System.EventHandler(this.selectTargetFolderButton_Click);
       // 
-      // folderListView
-      // 
-      this.folderListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-      this.folderListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colName,
-            this.colCount,
-            this.colModigy});
-      this.folderListView.HideSelection = false;
-      this.folderListView.Location = new System.Drawing.Point(20, 83);
-      this.folderListView.Name = "folderListView";
-      this.folderListView.Size = new System.Drawing.Size(762, 446);
-      this.folderListView.TabIndex = 1;
-      this.folderListView.UseCompatibleStateImageBehavior = false;
-      this.folderListView.View = System.Windows.Forms.View.Details;
-      // 
-      // colName
-      // 
-      this.colName.Text = "폴더명";
-      this.colName.Width = 401;
-      // 
-      // colCount
-      // 
-      this.colCount.Text = "파일개수";
-      this.colCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-      this.colCount.Width = 150;
-      // 
-      // colModigy
-      // 
-      this.colModigy.Text = "수정한날짜";
-      this.colModigy.Width = 200;
-      // 
       // label1
       // 
       this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.label1.AutoSize = true;
       this.label1.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
       this.label1.ForeColor = System.Drawing.Color.Purple;
-      this.label1.Location = new System.Drawing.Point(558, 532);
+      this.label1.Location = new System.Drawing.Point(558, 114);
       this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(112, 21);
+      this.label1.Size = new System.Drawing.Size(142, 21);
       this.label1.TabIndex = 2;
-      this.label1.Text = "총 파일 개수 :";
+      this.label1.Text = "총 jpg 파일 개수 :";
       // 
       // fileCountLabel
       // 
@@ -139,7 +104,7 @@
       this.fileCountLabel.AutoSize = true;
       this.fileCountLabel.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
       this.fileCountLabel.ForeColor = System.Drawing.Color.Purple;
-      this.fileCountLabel.Location = new System.Drawing.Point(741, 532);
+      this.fileCountLabel.Location = new System.Drawing.Point(741, 114);
       this.fileCountLabel.Name = "fileCountLabel";
       this.fileCountLabel.Size = new System.Drawing.Size(41, 21);
       this.fileCountLabel.TabIndex = 3;
@@ -152,12 +117,39 @@
       this.groupBox1.Controls.Add(this.numberTextBox);
       this.groupBox1.Controls.Add(this.label3);
       this.groupBox1.Controls.Add(this.label2);
-      this.groupBox1.Location = new System.Drawing.Point(34, 585);
+      this.groupBox1.Location = new System.Drawing.Point(34, 173);
       this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(251, 97);
+      this.groupBox1.Size = new System.Drawing.Size(251, 127);
       this.groupBox1.TabIndex = 4;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "폴더 이름 설정";
+      // 
+      // countTextBox
+      // 
+      this.countTextBox.Location = new System.Drawing.Point(124, 47);
+      this.countTextBox.Name = "countTextBox";
+      this.countTextBox.Size = new System.Drawing.Size(111, 21);
+      this.countTextBox.TabIndex = 1;
+      this.countTextBox.TextChanged += new System.EventHandler(this.countTextBox_TextChanged);
+      this.countTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.countTextBox_KeyPress);
+      // 
+      // numberTextBox
+      // 
+      this.numberTextBox.Location = new System.Drawing.Point(124, 24);
+      this.numberTextBox.Name = "numberTextBox";
+      this.numberTextBox.Size = new System.Drawing.Size(111, 21);
+      this.numberTextBox.TabIndex = 0;
+      this.numberTextBox.TextChanged += new System.EventHandler(this.numberTextBox_TextChanged);
+      // 
+      // label3
+      // 
+      this.label3.AutoSize = true;
+      this.label3.ForeColor = System.Drawing.Color.Blue;
+      this.label3.Location = new System.Drawing.Point(17, 50);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(101, 12);
+      this.label3.TabIndex = 1;
+      this.label3.Text = "최종 이미지 번호:";
       // 
       // label2
       // 
@@ -170,45 +162,47 @@
       this.label2.TabIndex = 0;
       this.label2.Text = "폴더번호:";
       // 
-      // label3
-      // 
-      this.label3.AutoSize = true;
-      this.label3.ForeColor = System.Drawing.Color.Blue;
-      this.label3.Location = new System.Drawing.Point(17, 50);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(101, 12);
-      this.label3.TabIndex = 1;
-      this.label3.Text = "최종 이미지 번호:";
-      // 
-      // numberTextBox
-      // 
-      this.numberTextBox.Location = new System.Drawing.Point(124, 24);
-      this.numberTextBox.Name = "numberTextBox";
-      this.numberTextBox.Size = new System.Drawing.Size(111, 21);
-      this.numberTextBox.TabIndex = 0;
-      this.numberTextBox.TextChanged += new System.EventHandler(this.numberTextBox_TextChanged);
-      // 
-      // countTextBox
-      // 
-      this.countTextBox.Location = new System.Drawing.Point(124, 47);
-      this.countTextBox.Name = "countTextBox";
-      this.countTextBox.Size = new System.Drawing.Size(111, 21);
-      this.countTextBox.TabIndex = 1;
-      this.countTextBox.TextChanged += new System.EventHandler(this.countTextBox_TextChanged);
-      this.countTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.countTextBox_KeyPress);
-      // 
       // groupBox2
       // 
       this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.groupBox2.Controls.Add(this.destinationFolderTextbox);
+      this.groupBox2.Controls.Add(this.destinationFolderButton);
       this.groupBox2.Controls.Add(this.label4);
       this.groupBox2.Controls.Add(this.destinationTextBox);
-      this.groupBox2.Location = new System.Drawing.Point(292, 585);
+      this.groupBox2.Location = new System.Drawing.Point(292, 173);
       this.groupBox2.Name = "groupBox2";
-      this.groupBox2.Size = new System.Drawing.Size(502, 97);
+      this.groupBox2.Size = new System.Drawing.Size(502, 127);
       this.groupBox2.TabIndex = 5;
       this.groupBox2.TabStop = false;
       this.groupBox2.Text = "생성폴더명";
+      // 
+      // destinationFolderTextbox
+      // 
+      this.destinationFolderTextbox.Location = new System.Drawing.Point(88, 27);
+      this.destinationFolderTextbox.Name = "destinationFolderTextbox";
+      this.destinationFolderTextbox.ReadOnly = true;
+      this.destinationFolderTextbox.Size = new System.Drawing.Size(402, 21);
+      this.destinationFolderTextbox.TabIndex = 3;
+      // 
+      // destinationFolderButton
+      // 
+      this.destinationFolderButton.Location = new System.Drawing.Point(6, 27);
+      this.destinationFolderButton.Name = "destinationFolderButton";
+      this.destinationFolderButton.Size = new System.Drawing.Size(75, 23);
+      this.destinationFolderButton.TabIndex = 2;
+      this.destinationFolderButton.Text = "저장폴더";
+      this.destinationFolderButton.UseVisualStyleBackColor = true;
+      this.destinationFolderButton.Click += new System.EventHandler(this.destinationFolderButton_Click);
+      // 
+      // label4
+      // 
+      this.label4.AutoSize = true;
+      this.label4.Location = new System.Drawing.Point(6, 66);
+      this.label4.Name = "label4";
+      this.label4.Size = new System.Drawing.Size(285, 12);
+      this.label4.TabIndex = 1;
+      this.label4.Text = "폴더번호-총파일개수-(최종이미지번호+총파일개수)";
       // 
       // destinationTextBox
       // 
@@ -216,7 +210,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.destinationTextBox.Font = new System.Drawing.Font("맑은 고딕", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-      this.destinationTextBox.Location = new System.Drawing.Point(6, 50);
+      this.destinationTextBox.Location = new System.Drawing.Point(6, 83);
       this.destinationTextBox.Name = "destinationTextBox";
       this.destinationTextBox.ReadOnly = true;
       this.destinationTextBox.Size = new System.Drawing.Size(490, 33);
@@ -230,7 +224,7 @@
       this.combineButton.BackColor = System.Drawing.SystemColors.Highlight;
       this.combineButton.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
       this.combineButton.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-      this.combineButton.Location = new System.Drawing.Point(671, 688);
+      this.combineButton.Location = new System.Drawing.Point(671, 306);
       this.combineButton.Name = "combineButton";
       this.combineButton.Size = new System.Drawing.Size(123, 71);
       this.combineButton.TabIndex = 6;
@@ -238,21 +232,12 @@
       this.combineButton.UseVisualStyleBackColor = false;
       this.combineButton.Click += new System.EventHandler(this.combineButton_Click);
       // 
-      // label4
-      // 
-      this.label4.AutoSize = true;
-      this.label4.Location = new System.Drawing.Point(6, 33);
-      this.label4.Name = "label4";
-      this.label4.Size = new System.Drawing.Size(285, 12);
-      this.label4.TabIndex = 1;
-      this.label4.Text = "폴더번호-총파일개수-(최종이미지번호+총파일개수)";
-      // 
       // totalFolderCountLabel
       // 
       this.totalFolderCountLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.totalFolderCountLabel.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
       this.totalFolderCountLabel.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-      this.totalFolderCountLabel.Location = new System.Drawing.Point(422, 532);
+      this.totalFolderCountLabel.Location = new System.Drawing.Point(422, 114);
       this.totalFolderCountLabel.Name = "totalFolderCountLabel";
       this.totalFolderCountLabel.Size = new System.Drawing.Size(74, 21);
       this.totalFolderCountLabel.TabIndex = 8;
@@ -264,7 +249,7 @@
       this.label6.AutoSize = true;
       this.label6.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
       this.label6.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-      this.label6.Location = new System.Drawing.Point(304, 532);
+      this.label6.Location = new System.Drawing.Point(304, 114);
       this.label6.Name = "label6";
       this.label6.Size = new System.Drawing.Size(112, 21);
       this.label6.TabIndex = 7;
@@ -274,7 +259,7 @@
       // 
       this.fileProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.fileProgressBar.Location = new System.Drawing.Point(34, 697);
+      this.fileProgressBar.Location = new System.Drawing.Point(34, 315);
       this.fileProgressBar.Maximum = 1000;
       this.fileProgressBar.Name = "fileProgressBar";
       this.fileProgressBar.Size = new System.Drawing.Size(611, 23);
@@ -283,7 +268,7 @@
       // statusLabel
       // 
       this.statusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-      this.statusLabel.Location = new System.Drawing.Point(34, 723);
+      this.statusLabel.Location = new System.Drawing.Point(34, 341);
       this.statusLabel.Name = "statusLabel";
       this.statusLabel.Size = new System.Drawing.Size(611, 23);
       this.statusLabel.TabIndex = 10;
@@ -302,7 +287,7 @@
       this.AllowDrop = true;
       this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(800, 771);
+      this.ClientSize = new System.Drawing.Size(800, 389);
       this.Controls.Add(this.statusLabel);
       this.Controls.Add(this.fileProgressBar);
       this.Controls.Add(this.totalFolderCountLabel);
@@ -312,7 +297,6 @@
       this.Controls.Add(this.groupBox1);
       this.Controls.Add(this.fileCountLabel);
       this.Controls.Add(this.label1);
-      this.Controls.Add(this.folderListView);
       this.Controls.Add(this.targetGroupBox);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "LowfiCombiner";
@@ -335,10 +319,6 @@
     private System.Windows.Forms.GroupBox targetGroupBox;
     private System.Windows.Forms.TextBox targetFolderTextBox;
     private System.Windows.Forms.Button selectTargetFolderButton;
-    private System.Windows.Forms.ListView folderListView;
-    private System.Windows.Forms.ColumnHeader colName;
-    private System.Windows.Forms.ColumnHeader colCount;
-    private System.Windows.Forms.ColumnHeader colModigy;
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.Label fileCountLabel;
     private System.Windows.Forms.GroupBox groupBox1;
@@ -355,6 +335,8 @@
     private System.Windows.Forms.ProgressBar fileProgressBar;
     private System.Windows.Forms.Label statusLabel;
     private System.ComponentModel.BackgroundWorker fileBackgroundWorker;
+    private System.Windows.Forms.TextBox destinationFolderTextbox;
+    private System.Windows.Forms.Button destinationFolderButton;
   }
 }
 
