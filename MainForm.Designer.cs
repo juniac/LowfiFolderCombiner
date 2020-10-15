@@ -45,6 +45,8 @@
       this.fileProgressBar = new System.Windows.Forms.ProgressBar();
       this.statusLabel = new System.Windows.Forms.Label();
       this.fileBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+      this.tanosButton = new System.Windows.Forms.Button();
+      this.deleteBackgroundWorker = new System.ComponentModel.BackgroundWorker();
       this.targetGroupBox.SuspendLayout();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
@@ -262,13 +264,13 @@
       this.fileProgressBar.Location = new System.Drawing.Point(34, 315);
       this.fileProgressBar.Maximum = 1000;
       this.fileProgressBar.Name = "fileProgressBar";
-      this.fileProgressBar.Size = new System.Drawing.Size(611, 23);
+      this.fileProgressBar.Size = new System.Drawing.Size(492, 23);
       this.fileProgressBar.TabIndex = 9;
       // 
       // statusLabel
       // 
       this.statusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-      this.statusLabel.Location = new System.Drawing.Point(34, 341);
+      this.statusLabel.Location = new System.Drawing.Point(-85, 341);
       this.statusLabel.Name = "statusLabel";
       this.statusLabel.Size = new System.Drawing.Size(611, 23);
       this.statusLabel.TabIndex = 10;
@@ -282,12 +284,33 @@
       this.fileBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.fileBackgroundWorker_ProgressChanged);
       this.fileBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.fileBackgroundWorker_RunWorkerCompleted);
       // 
+      // tanosButton
+      // 
+      this.tanosButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+      this.tanosButton.BackColor = System.Drawing.Color.BlueViolet;
+      this.tanosButton.ForeColor = System.Drawing.Color.White;
+      this.tanosButton.Location = new System.Drawing.Point(533, 306);
+      this.tanosButton.Name = "tanosButton";
+      this.tanosButton.Size = new System.Drawing.Size(132, 71);
+      this.tanosButton.TabIndex = 11;
+      this.tanosButton.Text = "반 삭제";
+      this.tanosButton.UseVisualStyleBackColor = false;
+      this.tanosButton.Click += new System.EventHandler(this.tanosButton_Click);
+      // 
+      // deleteBackgroundWorker
+      // 
+      this.deleteBackgroundWorker.WorkerReportsProgress = true;
+      this.deleteBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.deleteBackgroundWorker_DoWork);
+      this.deleteBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.deleteBackgroundWorker_ProgressChanged_1);
+      this.deleteBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.deleteBackgroundWorker_RunWorkerCompleted);
+      // 
       // LowfiCombiner
       // 
       this.AllowDrop = true;
       this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(800, 389);
+      this.Controls.Add(this.tanosButton);
       this.Controls.Add(this.statusLabel);
       this.Controls.Add(this.fileProgressBar);
       this.Controls.Add(this.totalFolderCountLabel);
@@ -337,6 +360,8 @@
     private System.ComponentModel.BackgroundWorker fileBackgroundWorker;
     private System.Windows.Forms.TextBox destinationFolderTextbox;
     private System.Windows.Forms.Button destinationFolderButton;
+    private System.Windows.Forms.Button tanosButton;
+    private System.ComponentModel.BackgroundWorker deleteBackgroundWorker;
   }
 }
 

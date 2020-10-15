@@ -219,8 +219,8 @@ namespace LowfiCombiner {
             fileDestination = destinationFolder + '\\' + randomString(5) + '-' + file.Name;
           }
           //Debug.WriteLine(fileDestination);
-          File.Copy(file.FullName, fileDestination);
-          //File.Move(file.FullName, fileDestination);
+          //File.Copy(file.FullName, fileDestination);
+          File.Move(file.FullName, fileDestination);
 
         } else {
           //File.Delete(file.FullName);
@@ -251,6 +251,60 @@ namespace LowfiCombiner {
         string selectedFolder = betterFolderBrowser.SelectedFolder;
         destinationFolderTextbox.Text = selectedFolder;
       }
+    }
+
+    private void tanosButton_Click(object sender, EventArgs e) {
+      moveProgress = 0;
+      statusLabel.Text = "파일 반 삭제중...";
+      deleteBackgroundWorker.RunWorkerAsync();
+    }
+
+    private void deleteBackgroundWorker_DoWork(object sender, DoWorkEventArgs e) {
+      DirectoryInfo dir = new DirectoryInfo(this.targetFolder);
+      DirectoryInfo[] folders = dir.GetDirectories();
+
+      int count = 0;
+
+      foreach (FileInfo file in files) {
+        string fileDestination = destinationFolder + '\\' + file.Name;
+        //Debug.WriteLine(fileDestination);
+
+        moveProgress = (int)Math.Round(((double)count / (double)totalFiles) * 1000);
+        string extension = Path.GetExtension(file.FullName).ToUpper();
+        if (extension == ".JPEG" || extension == ".JPG") {
+          if (File.Exists(fileDestination)) {
+            fileDestination = destinationFolder + '\\' + randomString(5) + '-' + file.Name;
+          }
+          Debug.WriteLine(file.FullName);
+          //File.Copy(file.FullName, fileDestination);
+          if (count % 2 == 0) {
+            File.Delete(file.FullName);
+          }
+          
+          
+        } else {
+          //File.Delete(file.FullName);
+        }
+
+        statusLabel.Invoke((MethodInvoker)delegate {
+          statusLabel.Text = $"{file.Name} 삭제중.. {(moveProgress / 10).ToString()}% - {count.ToString()} / {totalFiles.ToString()}";
+        });
+
+        //Debug.WriteLine(((double)count / (double)totalFiles) * 1000);
+        deleteBackgroundWorker.ReportProgress(moveProgress);
+        count++;
+      }
+
+    }
+
+    private void deleteBackgroundWorker_ProgressChanged_1(object sender, ProgressChangedEventArgs e) {
+      fileProgressBar.Value = e.ProgressPercentage;
+    }
+
+    private void deleteBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+      statusLabel.Text = "완료";
+      fileProgressBar.Value = 0;
+      readTargetFolder();
     }
   }
 }
