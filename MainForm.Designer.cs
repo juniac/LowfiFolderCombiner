@@ -47,6 +47,9 @@
       this.fileBackgroundWorker = new System.ComponentModel.BackgroundWorker();
       this.tanosButton = new System.Windows.Forms.Button();
       this.deleteBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+      this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+      this.resizeButton = new System.Windows.Forms.Button();
+      this.resizeBackgroundWorker = new System.ComponentModel.BackgroundWorker();
       this.targetGroupBox.SuspendLayout();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
@@ -264,15 +267,15 @@
       this.fileProgressBar.Location = new System.Drawing.Point(34, 315);
       this.fileProgressBar.Maximum = 1000;
       this.fileProgressBar.Name = "fileProgressBar";
-      this.fileProgressBar.Size = new System.Drawing.Size(492, 23);
+      this.fileProgressBar.Size = new System.Drawing.Size(303, 23);
       this.fileProgressBar.TabIndex = 9;
       // 
       // statusLabel
       // 
       this.statusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-      this.statusLabel.Location = new System.Drawing.Point(-85, 341);
+      this.statusLabel.Location = new System.Drawing.Point(32, 341);
       this.statusLabel.Name = "statusLabel";
-      this.statusLabel.Size = new System.Drawing.Size(611, 23);
+      this.statusLabel.Size = new System.Drawing.Size(305, 23);
       this.statusLabel.TabIndex = 10;
       this.statusLabel.Text = "대기중";
       this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -304,12 +307,33 @@
       this.deleteBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.deleteBackgroundWorker_ProgressChanged_1);
       this.deleteBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.deleteBackgroundWorker_RunWorkerCompleted);
       // 
+      // resizeButton
+      // 
+      this.resizeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+      this.resizeButton.BackColor = System.Drawing.Color.Salmon;
+      this.resizeButton.ForeColor = System.Drawing.Color.White;
+      this.resizeButton.Location = new System.Drawing.Point(395, 306);
+      this.resizeButton.Name = "resizeButton";
+      this.resizeButton.Size = new System.Drawing.Size(132, 71);
+      this.resizeButton.TabIndex = 12;
+      this.resizeButton.Text = "이미지크기줄이기";
+      this.resizeButton.UseVisualStyleBackColor = false;
+      this.resizeButton.Click += new System.EventHandler(this.resizeButton_Click);
+      // 
+      // resizeBackgroundWorker
+      // 
+      this.resizeBackgroundWorker.WorkerReportsProgress = true;
+      this.resizeBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.resizeBackgroundWorker_DoWork);
+      this.resizeBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.resizeBackgroundWorker_ProgressChanged);
+      this.resizeBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.resizeBackgroundWorker_RunWorkerCompleted);
+      // 
       // LowfiCombiner
       // 
       this.AllowDrop = true;
       this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(800, 389);
+      this.Controls.Add(this.resizeButton);
       this.Controls.Add(this.tanosButton);
       this.Controls.Add(this.statusLabel);
       this.Controls.Add(this.fileProgressBar);
@@ -362,6 +386,9 @@
     private System.Windows.Forms.Button destinationFolderButton;
     private System.Windows.Forms.Button tanosButton;
     private System.ComponentModel.BackgroundWorker deleteBackgroundWorker;
+    private System.Windows.Forms.ColorDialog colorDialog1;
+    private System.Windows.Forms.Button resizeButton;
+    private System.ComponentModel.BackgroundWorker resizeBackgroundWorker;
   }
 }
 

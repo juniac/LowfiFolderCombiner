@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -172,7 +173,10 @@ namespace LowfiCombiner {
     }
 
     private void combineButton_Click(object sender, EventArgs e) {
-      
+      if (String.IsNullOrEmpty(this.targetFolder)) {
+        this.selectTargetFolder();
+        return;
+      }
       DirectoryInfo dir = Directory.GetParent(this.targetFolder);
       destinationFolder = dir.FullName + '\\' + destinationTextBox.Text;
 
@@ -214,11 +218,56 @@ namespace LowfiCombiner {
 
         moveProgress = (int)Math.Round(((double)count / (double)totalFiles) * 1000);
         string extension = Path.GetExtension(file.FullName).ToUpper();
-        if (extension == ".JPEG" || extension == ".JPG") {
-          if (File.Exists(fileDestination)) {
-            fileDestination = destinationFolder + '\\' + randomString(5) + '-' + file.Name;
+        //string lastFolder = Path.GetFileName(file.FullName.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+        string folderPath = Path.GetDirectoryName(file.FullName);
+
+        folderPath = folderPath.Replace(this.targetFolder, "");
+
+        if ((folderPath.IndexOf(":") == 1) || (folderPath.IndexOf("\\\\") == 0)) {
+          folderPath = folderPath.Substring(2);
+        }
+        if (folderPath.IndexOf("\\") > 0) {
+          folderPath = folderPath.Substring(folderPath.IndexOf("\\"));
+        }
+        folderPath = folderPath.Substring(1);
+        string[] subFolders = folderPath.Split(Path.DirectorySeparatorChar);
+
+        if (folderPath.Length > 200) {
+          int index = 0;
+          foreach (string sub in subFolders) {
+            //Console.WriteLine(dir);
+            if (sub.Length > 10) {
+              subFolders[index] = sub.Substring(0, 5);
+            }
+            index++;
           }
-          //Debug.WriteLine(fileDestination);
+        }
+        
+
+        //string[] subFolders = folderPath.Split(Path.DirectorySeparatorChar);
+        string folderName = string.Join("-", subFolders);
+
+        //if ((folderName.IndexOf(":") == 1) || (folderName.IndexOf("\\\\") == 0)) {
+        //  folderName = folderName.Substring(2); 
+        //}
+        //if (folderName.IndexOf("\\") > 0) { 
+        //  folderName = folderName.Substring(folderName.IndexOf("\\"));
+        //}
+        //folderName = folderName.Substring(1);
+
+        //folderName = folderName.Replace("\\", "-");
+        //Debug.WriteLine(folderName);
+
+        //string folderName = "";
+
+        if (extension == ".JPEG" || extension == ".JPG") {
+          //if (File.Exists(fileDestination)) {
+          //  fileDestination = destinationFolder + '\\' + randomString(5) + '-' + file.Name;
+          //}
+          
+          fileDestination = destinationFolder + '\\' + folderName + '-' + file.Name;
+          
+          Debug.WriteLine(fileDestination);
           //File.Copy(file.FullName, fileDestination);
           File.Move(file.FullName, fileDestination);
 
@@ -244,6 +293,7 @@ namespace LowfiCombiner {
     private void fileBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
       statusLabel.Text = "완료";
       fileProgressBar.Value = 0;
+      MessageBox.Show("폴더 합치기가 완료되었습니다.");
     }
 
     private void destinationFolderButton_Click(object sender, EventArgs e) {
@@ -254,6 +304,10 @@ namespace LowfiCombiner {
     }
 
     private void tanosButton_Click(object sender, EventArgs e) {
+      if (String.IsNullOrEmpty(this.targetFolder)) {
+        this.selectTargetFolder();
+        return;
+      }
       moveProgress = 0;
       statusLabel.Text = "파일 반 삭제중...";
       deleteBackgroundWorker.RunWorkerAsync();
@@ -305,6 +359,96 @@ namespace LowfiCombiner {
       statusLabel.Text = "완료";
       fileProgressBar.Value = 0;
       readTargetFolder();
+      MessageBox.Show("이미지 삭제가 완료되었습니다");
+    }
+
+
+    private void resizeButton_Click(object sender, EventArgs e) {
+      moveProgress = 0;
+      statusLabel.Text = "이미지 리사이즈중...";
+      resizeBackgroundWorker.RunWorkerAsync();
+    }
+
+    private void resizeBackgroundWorker_DoWork(object sender, DoWorkEventArgs e) {
+      if (String.IsNullOrEmpty(this.targetFolder)) {
+        this.selectTargetFolder();
+        return;
+      }
+      DirectoryInfo dir = new DirectoryInfo(this.targetFolder);
+      DirectoryInfo[] folders = dir.GetDirectories();
+
+      int count = 0;
+
+      foreach (FileInfo file in files) {
+        
+        moveProgress = (int)Math.Round(((double)count / (double)totalFiles) * 1000);
+        string extension = Path.GetExtension(file.FullName).ToUpper();
+        if (extension == ".JPEG" || extension == ".JPG") {
+          Image image = Image.FromFile(file.FullName);
+          int maxSize = 1500;
+          if (image.Width > maxSize || image.Height > maxSize) {
+            Image resizedImage = ScaleImage(image, maxSize, maxSize);
+            image.Dispose();
+            resizedImage.Save(file.FullName, ImageFormat.Jpeg);
+            resizedImage.Dispose();
+
+          }
+          
+          
+        }
+
+        statusLabel.Invoke((MethodInvoker)delegate {
+          statusLabel.Text = $"{file.Name} 리사이즈중.. {(moveProgress / 10).ToString()}% - {count.ToString()} / {totalFiles.ToString()}";
+        });
+
+        //Debug.WriteLine(((double)count / (double)totalFiles) * 1000);
+        resizeBackgroundWorker.ReportProgress(moveProgress);
+        count++;
+      }
+    }
+
+    private void resizeBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
+      fileProgressBar.Value = e.ProgressPercentage;
+    }
+
+    private void resizeBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+      statusLabel.Text = "완료";
+      fileProgressBar.Value = 0;
+      readTargetFolder();
+      MessageBox.Show("이미지 리사이즈가 완료되었습니다");
+    }
+
+    public Image ScaleImage(Image image, int maxWidth, int maxHeight) {
+
+      foreach (var prop in image.PropertyItems) {
+        if ((prop.Id == 0x0112 || prop.Id == 5029 || prop.Id == 274)) {
+          var value = (int)prop.Value[0];
+          if (value == 6) {
+            image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            break;
+          } else if (value == 8) {
+            image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+            break;
+          } else if (value == 3) {
+            image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+            break;
+          }
+        }
+      }
+
+      var ratioX = (double)maxWidth / image.Width;
+      var ratioY = (double)maxHeight / image.Height;
+      var ratio = Math.Min(ratioX, ratioY);
+
+      var newWidth = (int)(image.Width * ratio);
+      var newHeight = (int)(image.Height * ratio);
+
+      var newImage = new Bitmap(newWidth, newHeight);
+
+      using (var graphics = Graphics.FromImage(newImage))
+        graphics.DrawImage(image, 0, 0, newWidth, newHeight);
+
+      return newImage;
     }
   }
 }
