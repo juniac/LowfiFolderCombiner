@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using WK.Libraries.BetterFolderBrowserNS;
 
 namespace LowfiCombiner {
@@ -17,7 +18,9 @@ namespace LowfiCombiner {
 
     private BetterFolderBrowser betterFolderBrowser = new BetterFolderBrowser();
     private string targetFolder;
+    private string[] targetFolders;
     private string destinationFolder;
+    private string unionFolder;
     private int totalFiles = 0;
     private int moveProgress = 0;
     private Random random = new Random();
@@ -62,16 +65,25 @@ namespace LowfiCombiner {
 
 
     private void LowfiCombiner_DragDrop(object sender, DragEventArgs e) {
+      string[] paths = ((string[])e.Data.GetData(DataFormats.FileDrop));
+
       
-      string path = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
-     
-      if (Directory.Exists(path)) {
-        targetFolderTextBox.Text = path;
-        
-        this.targetFolder = path;
-        this.readTargetFolder();
-        
+      if (paths.Length > 1) {
+        Debug.WriteLine(paths.Length);
+        this.targetFolders = paths;
+        this.readTargetFolders();
+      } else {
+        string path = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
+
+        if (Directory.Exists(path)) {
+          targetFolderTextBox.Text = path;
+
+          this.targetFolder = path;
+          this.readTargetFolder();
+
+        }
       }
+      
       
     }
 
@@ -83,6 +95,12 @@ namespace LowfiCombiner {
       }
     }
 
+    private void readTargetFolders() {
+      targetFoldersCountLabel.Text = $"{targetFolders.Length.ToString()} 개";
+      foreach(var sub in targetFolders) {
+        Debug.WriteLine(sub);
+      }
+    }
     private void readTargetFolder() {
       try {
         totalFiles = 0;
@@ -449,6 +467,76 @@ namespace LowfiCombiner {
         graphics.DrawImage(image, 0, 0, newWidth, newHeight);
 
       return newImage;
+    }
+
+    private void label2_Click(object sender, EventArgs e) {
+
+    }
+
+    private void label3_Click(object sender, EventArgs e) {
+
+    }
+
+    private void makeNameButton_Click(object sender, EventArgs e) {
+      string now = DateTime.Now.ToString("yyyy-MM-dd HH시mm분ss초");
+      unionFolderName.Text = now;
+    }
+
+    private void unionButton_Click(object sender, EventArgs e) {
+      moveProgress = 0;
+     
+      if (targetFolders.Length > 1 && !String.IsNullOrEmpty(targetFolders[0])) {
+        statusLabel.Text = "폴더 합치는 중...";
+        Debug.WriteLine(targetFolders);
+        Debug.WriteLine(targetFolders.Length);
+        DirectoryInfo dir = Directory.GetParent(targetFolders[0]);
+        if (String.IsNullOrEmpty(unionFolderName.Text)) {
+          string now = DateTime.Now.ToString("yyyy-MM-dd HH시mm분ss초");
+          unionFolderName.Text = now;
+        }
+        unionFolder = dir.FullName + '\\' + unionFolderName.Text + "-(" + targetFolders.Length.ToString() + ")";
+        if (System.IO.Directory.Exists(unionFolder)) {
+          var confirmResult = MessageBox.Show("폴더가 이미 존재합니다. 덮어쓰시겠습니까?", "덮어쓰기", MessageBoxButtons.YesNo);
+          if (confirmResult == DialogResult.Yes) {
+            Directory.CreateDirectory(unionFolder);
+            unionBackgroundWorker.RunWorkerAsync();
+          }
+        } else {
+          Directory.CreateDirectory(unionFolder);
+          unionBackgroundWorker.RunWorkerAsync();
+
+        }
+       
+      } else {
+        MessageBox.Show("합칠 폴더가 없습니다.");
+      }
+      
+    }
+
+    private void unionBackgroundWorker_DoWork(object sender, DoWorkEventArgs e) {
+      //Debug.WriteLine(unionFolder);
+      foreach(string dir in targetFolders) {
+        string lastPath = Path.GetFileName(dir);
+        string destination = unionFolder + '\\' + lastPath;
+        Directory.Move(dir, destination);
+
+      }
+    }
+
+    private void unionBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
+      fileProgressBar.Value = e.ProgressPercentage;
+    }
+
+    private void unionBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+      statusLabel.Text = "완료";
+      fileProgressBar.Value = 0;
+      Array.Clear(this.targetFolders, 0, this.targetFolders.Length);
+      //if (Directory.Exists(path)) {
+      //  Process.Start(path);
+      //}
+      targetFoldersCountLabel.Text = "0 개";
+      MessageBox.Show("폴더 합치기가 완료되었습니다");
+
     }
   }
 }
