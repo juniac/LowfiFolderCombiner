@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -264,7 +265,7 @@ namespace LowfiCombiner {
 
         //string[] subFolders = folderPath.Split(Path.DirectorySeparatorChar);
         string folderName = string.Join("-", subFolders);
-
+        
         //if ((folderName.IndexOf(":") == 1) || (folderName.IndexOf("\\\\") == 0)) {
         //  folderName = folderName.Substring(2); 
         //}
@@ -282,10 +283,18 @@ namespace LowfiCombiner {
           //if (File.Exists(fileDestination)) {
           //  fileDestination = destinationFolder + '\\' + randomString(5) + '-' + file.Name;
           //}
-          
+          folderName.Replace("^", "");
+          folderName.Replace("?", "");
+          folderName.Replace("|", "");
+          folderName.Replace("[", "");
+          folderName.Replace("]", "");
+          folderName.Replace("`", "");
+          folderName.Replace("\\", "");
+
+
           fileDestination = destinationFolder + '\\' + folderName + '-' + file.Name;
           
-          Debug.WriteLine(fileDestination);
+          //Debug.WriteLine(fileDestination);
           //File.Copy(file.FullName, fileDestination);
           File.Move(file.FullName, fileDestination);
 
@@ -337,6 +346,7 @@ namespace LowfiCombiner {
 
       int count = 0;
 
+      //Parallel.ForEach(files, file => {
       foreach (FileInfo file in files) {
         string fileDestination = destinationFolder + '\\' + file.Name;
         //Debug.WriteLine(fileDestination);
@@ -352,8 +362,8 @@ namespace LowfiCombiner {
           if (count % 2 == 0) {
             File.Delete(file.FullName);
           }
-          
-          
+
+
         } else {
           //File.Delete(file.FullName);
         }
@@ -365,6 +375,7 @@ namespace LowfiCombiner {
         //Debug.WriteLine(((double)count / (double)totalFiles) * 1000);
         deleteBackgroundWorker.ReportProgress(moveProgress);
         count++;
+      //});
       }
 
     }
@@ -396,23 +407,11 @@ namespace LowfiCombiner {
       DirectoryInfo[] folders = dir.GetDirectories();
 
       int count = 0;
-
-      foreach (FileInfo file in files) {
-        
+      Parallel.ForEach(files, file => {
         moveProgress = (int)Math.Round(((double)count / (double)totalFiles) * 1000);
         string extension = Path.GetExtension(file.FullName).ToUpper();
         if (extension == ".JPEG" || extension == ".JPG") {
-          Image image = Image.FromFile(file.FullName);
-          int maxSize = 1500;
-          if (image.Width > maxSize || image.Height > maxSize) {
-            Image resizedImage = ScaleImage(image, maxSize, maxSize);
-            image.Dispose();
-            resizedImage.Save(file.FullName, ImageFormat.Jpeg);
-            resizedImage.Dispose();
-
-          }
-          
-          
+          SaveScaleImage(file.FullName);
         }
 
         statusLabel.Invoke((MethodInvoker)delegate {
@@ -422,7 +421,23 @@ namespace LowfiCombiner {
         //Debug.WriteLine(((double)count / (double)totalFiles) * 1000);
         resizeBackgroundWorker.ReportProgress(moveProgress);
         count++;
-      }
+      });
+      //foreach (FileInfo file in files) {
+      //  moveProgress = (int)Math.Round(((double)count / (double)totalFiles) * 1000);
+      //  string extension = Path.GetExtension(file.FullName).ToUpper();
+      //  if (extension == ".JPEG" || extension == ".JPG") {
+      //    SaveScaleImage(file.FullName);
+      //  }
+
+      //  statusLabel.Invoke((MethodInvoker)delegate {
+      //    statusLabel.Text = $"{file.Name} 리사이즈중.. {(moveProgress / 10).ToString()}% - {count.ToString()} / {totalFiles.ToString()}";
+      //  });
+
+      //  //Debug.WriteLine(((double)count / (double)totalFiles) * 1000);
+      //  resizeBackgroundWorker.ReportProgress(moveProgress);
+      //  count++;
+
+      //}
     }
 
     private void resizeBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
@@ -436,8 +451,13 @@ namespace LowfiCombiner {
       MessageBox.Show("이미지 리사이즈가 완료되었습니다");
     }
 
-    public Image ScaleImage(Image image, int maxWidth, int maxHeight) {
+    public void SaveScaleImage(string filePath) {
 
+      var image = Bitmap.FromFile(filePath);
+      int maxSize = 1500;
+      if (image.Width < maxSize && image.Height < maxSize) {
+        return;
+      }
       foreach (var prop in image.PropertyItems) {
         if ((prop.Id == 0x0112 || prop.Id == 5029 || prop.Id == 274)) {
           var value = (int)prop.Value[0];
@@ -453,29 +473,30 @@ namespace LowfiCombiner {
           }
         }
       }
+        
 
-      var ratioX = (double)maxWidth / image.Width;
-      var ratioY = (double)maxHeight / image.Height;
+      var ratioX = (double)maxSize / image.Width;
+      var ratioY = (double)maxSize / image.Height;
       var ratio = Math.Min(ratioX, ratioY);
 
       var newWidth = (int)(image.Width * ratio);
       var newHeight = (int)(image.Height * ratio);
 
-      var newImage = new Bitmap(newWidth, newHeight);
-
-      using (var graphics = Graphics.FromImage(newImage))
+      using (var newImage = new Bitmap(newWidth, newHeight))
+      using (var graphics = Graphics.FromImage(newImage)) {
+        graphics.CompositingMode = CompositingMode.SourceCopy;
+        graphics.CompositingQuality = CompositingQuality.HighSpeed;
+        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
         graphics.DrawImage(image, 0, 0, newWidth, newHeight);
-
-      return newImage;
+        image.Dispose();
+        newImage.Save(filePath, ImageFormat.Jpeg);
+      }
+      System.GC.Collect(0, GCCollectionMode.Forced);
+      System.GC.WaitForFullGCComplete();
     }
+    
 
-    private void label2_Click(object sender, EventArgs e) {
 
-    }
-
-    private void label3_Click(object sender, EventArgs e) {
-
-    }
 
     private void makeNameButton_Click(object sender, EventArgs e) {
       string now = DateTime.Now.ToString("yyyy-MM-dd HH시mm분ss초");
